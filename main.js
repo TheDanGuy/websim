@@ -18,8 +18,8 @@ function createDarkModePanel() {
   const panel = document.createElement("div");
   panel.id = "darkModePanel";
   panel.style.position = "absolute";
-  panel.style.width = "300px";
-  panel.style.height = "200px";
+  panel.style.width = "700px";
+  panel.style.height = "400px";
   panel.style.backgroundColor = "#333"; // Dark mode background
   panel.style.color = "#fff"; // Dark mode text
   panel.style.border = "1px solid #444";
@@ -27,7 +27,7 @@ function createDarkModePanel() {
   panel.style.padding = "10px";
   panel.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
   panel.style.cursor = "move";
-  panel.innerHTML = "Dark Mode Draggable Panel";
+  panel.innerHTML = "<h1>WebCheat</h1>";
 
   // Position the panel in the middle of the viewport
   const viewportHeight = window.innerHeight;
