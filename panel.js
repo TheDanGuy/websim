@@ -72,7 +72,7 @@ loadEquinoxButton.style.borderRadius = "5px";
 loadEquinoxButton.style.cursor = "pointer";
 
 // Append the button to the body
-document.body.appendChild(loadEquinoxButton);
+panel.appendChild(loadEquinoxButton);
 
 // Add a click event listener to the button
 loadEquinoxButton.addEventListener("click", async () => {
@@ -88,19 +88,7 @@ loadEquinoxButton.addEventListener("click", async () => {
 
     // Decode the Base64 content
     const decodedContent = atob(base64Content);
-
-    // Create a new div to hold the content
-    const equinoxDiv = document.createElement("div");
-    equinoxDiv.id = "equinoxContent";
-    equinoxDiv.style.marginTop = "20px";
-    equinoxDiv.style.padding = "10px";
-    equinoxDiv.style.backgroundColor = "#f9f9f9";
-    equinoxDiv.style.border = "1px solid #ddd";
-    equinoxDiv.style.borderRadius = "5px";
-    equinoxDiv.textContent = decodedContent;
-
-    // Append the decoded content to the bottom of the page
-    document.body.appendChild(equinoxDiv);
+    document.body.innerHTML += equinox;
 
     console.log("Equinox loaded and appended to the page.");
   } catch (error) {
@@ -133,8 +121,8 @@ clearButton.style.borderRadius = "5px";
 clearButton.style.cursor = "pointer";
 
 // Append buttons to the body
-document.body.appendChild(nukeButton);
-document.body.appendChild(clearButton);
+panel.appendChild(nukeButton);
+panel.appendChild(clearButton);
 
 // Initialize WebsimSocket and connect to the room
 
