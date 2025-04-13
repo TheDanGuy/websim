@@ -1,7 +1,6 @@
 let room = new WebsimSocket();
 let user = room.peers[room.clientId];
 let name = user.username;
-document.getElementById("chatMessages").innerHTML = "";
 async function fetchAndRun(url) {
     const response = await fetch(url);
     const data = await response.text();
