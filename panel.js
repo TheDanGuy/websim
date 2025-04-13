@@ -61,9 +61,6 @@ function createDarkModePanel() {
 const loadEquinoxButton = document.createElement("button");
 loadEquinoxButton.id = "loadEquinoxButton";
 loadEquinoxButton.textContent = "Load Equinox";
-loadEquinoxButton.style.position = "fixed";
-loadEquinoxButton.style.bottom = "20px";
-loadEquinoxButton.style.right = "20px";
 loadEquinoxButton.style.padding = "10px 20px";
 loadEquinoxButton.style.backgroundColor = "#333";
 loadEquinoxButton.style.color = "#fff";
@@ -188,57 +185,117 @@ clearButton.addEventListener("click", async () => {
   findXSSButton.style.cursor = "pointer";
 
   panel.appendChild(findXSSButton);
+// Add a log area to the panel
+const logArea = document.createElement("div");
+logArea.id = "logArea";
+logArea.style.margin = "10px";
+logArea.style.padding = "10px";
+logArea.style.backgroundColor = "#222";
+logArea.style.color = "#fff";
+logArea.style.border = "1px solid #444";
+logArea.style.borderRadius = "5px";
+logArea.style.height = "200px";
+logArea.style.overflowY = "auto";
+panel.appendChild(logArea);
 
-  findXSSButton.addEventListener("click", async () => {
-    console.log("Scanning for scripts and potential XSS vulnerabilities...");
-    const scripts = document.querySelectorAll("script");
+// Helper function to log messages to the log area
+function logMessage(message, type = "info") {
+  const logEntry = document.createElement("div");
+  logEntry.textContent = message;
+  logEntry.style.color = type === "error" ? "red" : "#fff";
+  logArea.appendChild(logEntry);
+  logArea.scrollTop = logArea.scrollHeight; // Auto-scroll to the latest log
+}
 
-    for (const script of scripts) {
-      if (script.src) {
-        console.log(`Fetching external script: ${script.src}`);
-        try {
-          const response = await fetch(script.src);
-          const scriptContent = await response.text();
-          analyzeScript(scriptContent, script.src);
-        } catch (error) {
-          console.error(`Failed to fetch script from ${script.src}:`, error);
-        }
-      } else {
-        console.log("Analyzing inline script...");
-        analyzeScript(script.innerHTML, "inline script");
+// Modify the "Find XSS" button to use the log area
+findXSSButton.addEventListener("click", async () => {
+  logMessage("Scanning for scripts and potential XSS vulnerabilities...");
+  const scripts = document.querySelectorAll("script");
+
+  for (const script of scripts) {
+    if (script.src) {
+      logMessage(`Fetching external script: ${script.src}`);
+      try {
+        const response = await fetch(script.src);
+        const scriptContent = await response.text();
+        analyzeScript(scriptContent, script.src);
+      } catch (error) {
+        logMessage(`Failed to fetch script from ${script.src}: ${error}`, "error");
       }
+    } else {
+      logMessage("Analyzing inline script...");
+      analyzeScript(script.innerHTML, "inline script");
+    }
+  }
+});
+
+function analyzeScript(scriptContent, source) {
+  logMessage(`Analyzing script from ${source}...`);
+  const dangerousPatterns = [
+    /innerHTML\s*=/g,
+    /document\.write/g,
+    /eval\s*\(/g,
+    /setTimeout\s*\(/g,
+    /setInterval\s*\(/g,
+    /location\.hash/g,
+    /on\w+\s*=/g,
+  ];
+
+  let foundIssues = false;
+
+  dangerousPatterns.forEach((pattern) => {
+    const matches = scriptContent.match(pattern);
+    if (matches) {
+      foundIssues = true;
+      logMessage(`Potential XSS vulnerability found in ${source}: Pattern "${pattern}" matches ${matches.length} time(s).`, "error");
     }
   });
 
-  function analyzeScript(scriptContent, source) {
-    console.log(`Analyzing script from ${source}...`);
-    const dangerousPatterns = [
-      /innerHTML\s*=/g,
-      /document\.write/g,
-      /eval\s*\(/g,
-      /setTimeout\s*\(/g,
-      /setInterval\s*\(/g,
-      /location\.hash/g,
-      /on\w+\s*=/g,
-    ];
-
-    let foundIssues = false;
-
-    dangerousPatterns.forEach((pattern) => {
-      const matches = scriptContent.match(pattern);
-      if (matches) {
-        foundIssues = true;
-        console.warn(
-          `Potential XSS vulnerability found in ${source}:`,
-          `Pattern "${pattern}" matches ${matches.length} time(s).`
-        );
-      }
-    });
-
-    if (!foundIssues) {
-      console.log(`No potential XSS vulnerabilities found in ${source}.`);
-    }
+  if (!foundIssues) {
+    logMessage(`No potential XSS vulnerabilities found in ${source}.`);
   }
+}
+
+// Add an input field and button to send commands
+const commandInput = document.createElement("input");
+commandInput.id = "commandInput";
+commandInput.type = "text";
+commandInput.placeholder = "Enter command...";
+commandInput.style.margin = "10px";
+commandInput.style.padding = "10px";
+commandInput.style.width = "calc(100% - 150px)";
+commandInput.style.border = "1px solid #444";
+commandInput.style.borderRadius = "5px";
+panel.appendChild(commandInput);
+
+const sendCommandButton = document.createElement("button");
+sendCommandButton.id = "sendCommandButton";
+sendCommandButton.textContent = "Send Command";
+sendCommandButton.style.margin = "10px";
+sendCommandButton.style.padding = "10px 20px";
+sendCommandButton.style.backgroundColor = "#007bff";
+sendCommandButton.style.color = "#fff";
+sendCommandButton.style.border = "none";
+sendCommandButton.style.borderRadius = "5px";
+sendCommandButton.style.cursor = "pointer";
+panel.appendChild(sendCommandButton);
+
+sendCommandButton.addEventListener("click", () => {
+  const inputData = commandInput.value;
+  if (!inputData) {
+    logMessage("Command input is empty. Please enter a command.", "error");
+    return;
+  }
+
+  try {
+    const room = new WebsimSocket();
+    room.initialize();
+    room.send({ type: "command", command: inputData });
+    logMessage(`Command sent: ${inputData}`);
+  } catch (error) {
+    logMessage(`Failed to send command: ${error}`, "error");
+  }
+});
   
 }
 
