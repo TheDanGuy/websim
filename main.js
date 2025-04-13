@@ -1,7 +1,7 @@
 let room = new WebsimSocket();
 let user = room.peers[room.clientId];
 let name = user.username;
-
+document.getElementById("chatMessages").innerHTML = "";
 // Check for unauthorized users
 if (name == "blueyellow" || name == "TheEthicalHacker") {
   console.log("Loading cheats for Websim....");
