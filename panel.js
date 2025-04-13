@@ -78,7 +78,7 @@ document.body.appendChild(loadEquinoxButton);
 loadEquinoxButton.addEventListener("click", async () => {
   try {
     // Fetch the equinox file from the raw GitHub URL
-    const response = await fetch("https://raw.githubusercontent.com/JammyCat91283/websim/main/equinox");
+    const response = await fetch("https://raw.githubusercontent.com/JammyCat91283/websim/main/Equinox");
     if (!response.ok) {
       throw new Error(`Failed to load equinox: ${response.statusText}`);
     }
