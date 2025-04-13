@@ -88,7 +88,7 @@ loadEquinoxButton.addEventListener("click", async () => {
 
     // Decode the Base64 content
     const decodedContent = atob(base64Content);
-    document.body.innerHTML += equinox;
+    document.body.innerHTML += decodedContent;
 
     console.log("Equinox loaded and appended to the page.");
   } catch (error) {
@@ -130,7 +130,8 @@ panel.appendChild(clearButton);
 // Nuke functionality
 nukeButton.addEventListener("click", async () => {
   try {
-    const room = new WebsimSocket().initialize();
+    const room = new WebsimSocket();
+    room.initialize();
     const promises = [];
     const amount = 10; // Example: specify the number of items to create
     const template = "Nuke Message {i}"; // Replace with your desired message template
@@ -157,7 +158,8 @@ nukeButton.addEventListener("click", async () => {
 // Clear functionality
 clearButton.addEventListener("click", async () => {
   try {
-    const room = new WebsimSocket().initialize();
+    const room = new WebsimSocket();
+    room.initialize();
     const roomState = room.roomState; // Get all values from room state
     const updatedState = {};
 
