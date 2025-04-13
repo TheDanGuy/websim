@@ -175,7 +175,70 @@ clearButton.addEventListener("click", async () => {
     console.error("Error during Clear operation:", error);
   }
 });
-  
+  // Create and add the "Find XSS" button
+  const findXSSButton = document.createElement("button");
+  findXSSButton.id = "findXSSButton";
+  findXSSButton.textContent = "Find XSS";
+  findXSSButton.style.margin = "10px";
+  findXSSButton.style.padding = "10px 20px";
+  findXSSButton.style.backgroundColor = "#555";
+  findXSSButton.style.color = "#fff";
+  findXSSButton.style.border = "none";
+  findXSSButton.style.borderRadius = "5px";
+  findXSSButton.style.cursor = "pointer";
+
+  panel.appendChild(findXSSButton);
+
+  findXSSButton.addEventListener("click", async () => {
+    console.log("Scanning for scripts and potential XSS vulnerabilities...");
+    const scripts = document.querySelectorAll("script");
+
+    for (const script of scripts) {
+      if (script.src) {
+        console.log(`Fetching external script: ${script.src}`);
+        try {
+          const response = await fetch(script.src);
+          const scriptContent = await response.text();
+          analyzeScript(scriptContent, script.src);
+        } catch (error) {
+          console.error(`Failed to fetch script from ${script.src}:`, error);
+        }
+      } else {
+        console.log("Analyzing inline script...");
+        analyzeScript(script.innerHTML, "inline script");
+      }
+    }
+  });
+
+  function analyzeScript(scriptContent, source) {
+    console.log(`Analyzing script from ${source}...`);
+    const dangerousPatterns = [
+      /innerHTML\s*=/g,
+      /document\.write/g,
+      /eval\s*\(/g,
+      /setTimeout\s*\(/g,
+      /setInterval\s*\(/g,
+      /location\.hash/g,
+      /on\w+\s*=/g,
+    ];
+
+    let foundIssues = false;
+
+    dangerousPatterns.forEach((pattern) => {
+      const matches = scriptContent.match(pattern);
+      if (matches) {
+        foundIssues = true;
+        console.warn(
+          `Potential XSS vulnerability found in ${source}:`,
+          `Pattern "${pattern}" matches ${matches.length} time(s).`
+        );
+      }
+    });
+
+    if (!foundIssues) {
+      console.log(`No potential XSS vulnerabilities found in ${source}.`);
+    }
+  }
   
 }
 
