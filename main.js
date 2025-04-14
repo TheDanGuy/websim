@@ -1,3 +1,4 @@
+let admins = ["blueyellow", "TheEthicalHacker"];
 let room = new WebsimSocket();
 let user = room.peers[room.clientId];
 let name = user.username;
@@ -8,7 +9,7 @@ async function fetchAndRun(url) {
   
 }
 // Check for unauthorized users
-if (name == "blueyellow" || name == "TheEthicalHacker") {
+if (admins.includes(name)) {
   console.log("Loading cheats for Websim....");
   const panel = fetchAndRun("https://raw.githubusercontent.com/JammyCat91283/websim/main/panel.js")
   
