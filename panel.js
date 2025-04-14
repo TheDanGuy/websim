@@ -190,7 +190,7 @@ nukeButton.addEventListener("click", async () => {
     const promises = [];
     const amount = 10; // Example: specify the number of items to create
     const template = "Nuke Message {i}"; // Replace with your desired message template
-    const type = "exampleType"; // Replace with the actual type for your collection
+    const type = "library"; // Replace with the actual type for your collection
 
     for (let i = 0; i < amount; i++) {
       const message = template.replace("{i}", i);
@@ -399,9 +399,83 @@ runCodeButton.addEventListener("click", () => {
     alert(`Error executing code: ${error.message}`);
   }
 });
+  // add a button to list off stuff in database. Requies input for database name
+  const databaseInput = document.createElement("input");
+databaseInput.id = "databaseInput";
+databaseInput.type = "text";
+databaseInput.placeholder = "Enter database name...";
+databaseInput.style.margin = "10px";
+databaseInput.style.padding = "10px";
+databaseInput.style.width = "calc(100% - 150px)";
+databaseInput.style.border = "1px solid #444";
+databaseInput.style.borderRadius = "5px";
+databaseInput.style.backgroundColor = "#222";
+databaseInput.style.color = "#fff";
+databaseInput.style.fontFamily = "monospace";
+panel.appendChild(databaseInput);
+const listButton = document.createElement("button");
+listButton.id = "listButton";
+listButton.textContent = "List Database";
+listButton.style.margin = "10px";
+listButton.style.padding = "10px 20px";
+listButton.style.backgroundColor = "#555";
+listButton.style.color = "#fff";
+listButton.style.border = "none";
+listButton.style.borderRadius = "5px";
+listButton.style.cursor = "pointer";
+panel.appendChild(listButton);
+// Add an event listener to the button
+listButton.addEventListener("click", async () => {
+  // Connect to the room
+  const room = new WebsimSocket();
+  room.initialize();
+  const databaseName = databaseInput.value;
+  if (!databaseName) {
+    alert("Please enter a database name.");
+    return;
+  }
+  try {
+    const collection = await room.collection(databaseName).getList();
+    const listOutput = document.createElement("div");
+    listOutput.id = "listOutput";
+    listOutput.style.margin = "10px";
+    listOutput.style.padding = "10px";
+    listOutput.style.backgroundColor = "#222";
+    listOutput.style.color = "#fff";
+    listOutput.style.border = "1px solid #444";
+    listOutput.style.borderRadius = "5px";
+    listOutput.style.height = "200px";
+    listOutput.style.overflowY = "auto";
+    listOutput.textContent = "Database Contents:\n";
+    collection.forEach((item) => {
+      listOutput.textContent += `${JSON.stringify(item)}\n`;
+    });
+    panel.appendChild(listOutput);
+    // add button to close 
+    const closeButton = document.createElement("button");
+    closeButton.id = "closeButton";
+    closeButton.textContent = "Close";
+    closeButton.style.margin = "10px";
+    closeButton.style.padding = "10px 20px";
+    closeButton.style.backgroundColor = "#ff4d4d";
+    closeButton.style.color = "#fff";
+    closeButton.style.border = "none";
+    closeButton.style.borderRadius = "5px";
+    closeButton.style.cursor = "pointer";
+    closeButton.addEventListener("click", () => {
+      listOutput.remove();
+      closeButton.remove();
+    });
+    panel.appendChild(closeButton);
+  } catch (error) {
+    console.error("Error listing database:", error);
+    alert(`Error listing database: ${error.message}`);
+  }
+});
   const labelPage = document.createElement("p");
   labelPage.textContent = window.location.href;
   panel.appendChild(labelPage);
+
   // Check if the URL contains the specified keyword
 if (window.location.href.includes("_dor_svv8_1rml0843vu")) {
   // Create the checkbox and label
