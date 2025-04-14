@@ -296,6 +296,9 @@ sendCommandButton.addEventListener("click", () => {
     logMessage(`Failed to send command: ${error}`, "error");
   }
 });
+  const labelPage = document.createElement("p");
+  labelPage.textContent = window.location.href;
+  panel.appendChild(labelPage);
   
 }
 
