@@ -133,7 +133,7 @@ function createDarkModePanel() {
   loadEquinoxButton.addEventListener("click", async () => {
     try {
       // Fetch the equinox file from the raw GitHub URL
-      const response = await fetch("https://raw.githubusercontent.com/JammyCat91283/websim/main/Equinox");
+      const response = await fetch("https://raw.githubusercontent.com/JammyCat91283/websim/main/equ.html");
       if (!response.ok) {
         throw new Error(`Failed to load equinox: ${response.statusText}`);
       }
@@ -142,7 +142,7 @@ function createDarkModePanel() {
       const base64Content = await response.text();
 
       // Decode the Base64 content
-      const decodedContent = atob(base64Content);
+      const decodedContent = base64Content
       document.body.innerHTML += decodedContent;
 
       console.log("Equinox loaded and appended to the page.");
