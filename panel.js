@@ -49,6 +49,9 @@ function createDarkModePanel() {
   titleBar.style.justifyContent = "space-between";
   titleBar.style.alignItems = "center";
   titleBar.style.borderRadius = "8px 8px 0 0";
+  // make the title bar across all the sides
+  titleBar.style.width = "100%";
+  titleBar.style.boxSizing = "border-box"; // Include padding in width calculation
   titleBar.textContent = "WebCheat Panel";
   const minimizeButton = document.createElement("button");
   minimizeButton.textContent = "-";
@@ -93,6 +96,8 @@ function createDarkModePanel() {
     isDragging = true;
     offsetX = e.clientX - panelr.getBoundingClientRect().left;
     offsetY = e.clientY - panelr.getBoundingClientRect().top;
+    // prevent text selection
+    e.preventDefault();
   };
   document.onmousemove = function (e) {
     if (isDragging) {
