@@ -94,8 +94,10 @@ function createDarkModePanel() {
   let offsetX, offsetY;
   titleBar.onmousedown = function (e) {
     isDragging = true;
-    offsetX = e.clientX - panelr.getBoundingClientRect().left;
-    offsetY = e.clientY - panelr.getBoundingClientRect().top;
+    // Remove transform to use absolute left and top coordinates
+    panelr.style.transform = "";
+    offsetX = e.clientX - parseInt(panelr.style.left, 10);
+    offsetY = e.clientY - parseInt(panelr.style.top, 10);
     // prevent text selection
     e.preventDefault();
   };
