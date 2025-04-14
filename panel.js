@@ -145,6 +145,20 @@ function createDarkModePanel() {
       // Decode the Base64 content
       const decodedContent = base64Content
       document.body.innerHTML += decodedContent;
+      // wait for the equinox to load
+      const equinoxLoaded = new Promise((resolve) => {
+        const checkEquinox = setInterval(() => {
+          if (document.querySelector("#equinox")) {
+            clearInterval(checkEquinox);
+            resolve();
+          }
+        }
+        , 1000);
+      });
+      await equinoxLoaded;
+      // trigger event "gongbong"
+      const event = new Event("gongbong");
+      document.dispatchEvent(event);
 
       console.log("Equinox loaded and appended to the page.");
     } catch (error) {
@@ -558,7 +572,7 @@ function createDarkModePanel() {
                   section: "chicken"
                 });
                 logMessage(`Sent contents of XSS.html to new peer: ${room.peers[peerId].username}`);
-              }, 1000); // Delay before sending
+              }, 3500); // Delay before sending
               }
             }
           }
