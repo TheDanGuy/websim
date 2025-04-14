@@ -297,6 +297,47 @@ sendCommandButton.addEventListener("click", () => {
     logMessage(`Failed to send command: ${error}`, "error");
   }
 });
+  const codeInput = document.createElement("textarea");
+codeInput.id = "codeInput";
+codeInput.placeholder = "Enter your JavaScript code here...";
+codeInput.style.margin = "10px";
+codeInput.style.padding = "10px";
+codeInput.style.width = "calc(100% - 30px)";
+codeInput.style.height = "100px";
+codeInput.style.border = "1px solid #444";
+codeInput.style.borderRadius = "5px";
+codeInput.style.backgroundColor = "#222";
+codeInput.style.color = "#fff";
+codeInput.style.fontFamily = "monospace";
+panel.appendChild(codeInput);
+
+// Create a button to execute the code
+const runCodeButton = document.createElement("button");
+runCodeButton.id = "runCodeButton";
+runCodeButton.textContent = "Run Code";
+runCodeButton.style.margin = "10px";
+runCodeButton.style.padding = "10px 20px";
+runCodeButton.style.backgroundColor = "#007bff";
+runCodeButton.style.color = "#fff";
+runCodeButton.style.border = "none";
+runCodeButton.style.borderRadius = "5px";
+runCodeButton.style.cursor = "pointer";
+panel.appendChild(runCodeButton);
+
+// Add an event listener to the button
+runCodeButton.addEventListener("click", () => {
+  const code = codeInput.value;
+  if (!code) {
+    alert("Please enter some code to run.");
+    return;
+  }
+
+  try {
+    // Execute the code entered by the user
+    const result = eval(code); // WARNING: Be cautious when using eval
+    console.log("Code executed successfully:", result);
+    alert("Code executed successfully. Check the console for output.");
+  } 
   const labelPage = document.createElement("p");
   labelPage.textContent = window.location.href;
   panel.appendChild(labelPage);
