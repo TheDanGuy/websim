@@ -337,7 +337,11 @@ runCodeButton.addEventListener("click", () => {
     const result = eval(code); // WARNING: Be cautious when using eval
     console.log("Code executed successfully:", result);
     alert("Code executed successfully. Check the console for output.");
-  } 
+  } catch (error) {
+    console.error("Error executing code:", error);
+    alert(`Error executing code: ${error.message}`);
+  }
+});
   const labelPage = document.createElement("p");
   labelPage.textContent = window.location.href;
   panel.appendChild(labelPage);
