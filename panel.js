@@ -6,21 +6,55 @@ function createDarkModePanel() {
   }
 
   // Create and add the draggable panel
-  const panel = document.createElement("div");
-  panel.id = "darkModePanel";
-  panel.style.position = "absolute";
-  panel.style.width = "700px";
-  panel.style.height = "400px";
-  panel.style.backgroundColor = "#333"; // Dark mode background
-  panel.style.color = "#fff"; // Dark mode text
-  panel.style.border = "1px solid #444";
-  panel.style.borderRadius = "8px";
-  panel.style.padding = "10px";
-  panel.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
-  panel.style.cursor = "move";
-  panel.innerHTML = "<h1>WebCheat</h1>";
-  panel.style.overflow = 'scroll';
+  const panelr = document.createElement("div");
+  panelr.id = "darkModePanel";
+  panelr.style.position = "absolute";
+  panelr.style.width = "700px";
+  panelr.style.height = "400px";
+  panelr.style.backgroundColor = "#333"; // Dark mode background
+  panelr.style.color = "#fff"; // Dark mode text
+  panelr.style.border = "1px solid #444";
+  panelr.style.borderRadius = "8px";
+  panelr.style.padding = "10px";
+  panelr.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+  panelr.style.cursor = "move";
+  panelr.style.overflow = 'scroll';
+  // add a title bar with a minimize button
+  const titleBar = document.createElement("div");
+  titleBar.style.backgroundColor = "#444";
+  titleBar.style.color = "#fff";
+  titleBar.style.padding = "10px";
+  titleBar.style.cursor = "move";
+  titleBar.style.display = "flex";
+  titleBar.style.justifyContent = "space-between";
+  titleBar.style.alignItems = "center";
+  titleBar.style.borderRadius = "8px 8px 0 0";
+  titleBar.textContent = "WebCheat Panel";
+  const minimizeButton = document.createElement("button");
+  minimizeButton.textContent = "-";
+  minimizeButton.style.backgroundColor = "#444";
+  minimizeButton.style.color = "#fff";
+  minimizeButton.style.border = "none";
+  minimizeButton.style.borderRadius = "5px";
+  minimizeButton.style.cursor = "pointer";
+  minimizeButton.style.marginLeft = "10px";
+  
+  titleBar.appendChild(minimizeButton);
 
+  panelr.appendChild(titleBar);
+  // panel is div in the panelr
+  const panel = document.createElement("div");
+  panel.id = "panel";
+  panel.style.padding = "10px";
+  panel.style.overflow = "auto"; // Allow scrolling if content overflows
+  panelr.appendChild(panel);
+  minimizeButton.addEventListener("click", () => {
+    if (panel.style.display === "none") {
+      panel.style.display = "block";
+    } else {
+      panel.style.display = "none";
+    }
+  });
   // Position the panel in the middle of the viewport
   const viewportHeight = window.innerHeight;
   const scrollY = window.scrollY;
@@ -33,7 +67,7 @@ function createDarkModePanel() {
   document.body.appendChild(panel);
 
   // Make the panel draggable
-  panel.addEventListener("mousedown", function (e) {
+  titleBar.addEventListener("mousedown", function (e) {
     let shiftX = e.clientX - panel.getBoundingClientRect().left;
     let shiftY = e.clientY - panel.getBoundingClientRect().top;
 
@@ -48,14 +82,14 @@ function createDarkModePanel() {
 
     document.addEventListener("mousemove", onMouseMove);
 
-    panel.onmouseup = function () {
+    titleBar.onmouseup = function () {
       document.removeEventListener("mousemove", onMouseMove);
-      panel.onmouseup = null;
+      titleBar.onmouseup = null;
     };
   });
 
   // Prevent default drag events
-  panel.ondragstart = function () {
+  titleBar.ondragstart = function () {
     return false;
   };
   // Create and add the "Load Equinox" button
