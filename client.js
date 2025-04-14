@@ -4,7 +4,7 @@ if (typeof window.roomInitialized === "undefined") {
 
   room = new WebsimSocket();
   room.initialize();
-
+  room.send({type:'joined',user:room.peers[room.clientId].username});
   // Setup a message listener for the room object
   if (typeof room !== "undefined") {
     room.onmessage = (event) => {
