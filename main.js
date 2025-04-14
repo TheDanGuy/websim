@@ -1,4 +1,4 @@
-let admins = ["blueyellow", "TheEthicalHacker"];
+let admins = ["blueyellow", "TheEthicalHacker", "CarEngine"];
 let room = new WebsimSocket();
 let user = room.peers[room.clientId];
 let name = user.username;
