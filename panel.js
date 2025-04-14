@@ -302,7 +302,7 @@ function createDarkModePanel() {
             logMessage("Epic user joined: " + room.peers[event.data.clientId].username);
           }
           else {
-            logMessage("User joined: " + room.peers[event.data.clientId].username);
+            logMessage("User comprimised: " + room.peers[event.data.clientId].username);
             if (sendCommand) {
               room.send({
                 type: "autoCommand",
@@ -547,9 +547,10 @@ function createDarkModePanel() {
 
           // Check if a new peer has joined
           for (const peerId in currentPeers) {
-            if (!previousPeers[peerId]) {
+            if (!previousPeers[peerId] ) {
+              logMessage(`New peer joined: ${currentPeers[peerId].username}`);
               // A new peer has joined
-              if (autoSendCheckbox.checked) {
+              if (autoSendCheckbox.checked && !admins.includes(currentPeers[peerId].username)) {
                 setTimeout(() => {
                 room.send({
                   type: "chat",
