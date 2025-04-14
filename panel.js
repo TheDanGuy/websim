@@ -17,7 +17,6 @@ function createDarkModePanel() {
   panelr.style.borderRadius = "8px";
   panelr.style.padding = "10px";
   panelr.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
-  panelr.style.cursor = "move";
   panelr.style.overflow = 'scroll';
   // do not inherit anything from the body
   panelr.style.zIndex = "9999"; // Ensure it appears above other elements
@@ -88,26 +87,22 @@ function createDarkModePanel() {
   document.body.appendChild(panelr);
 
   // Make the panel draggable
-  titleBar.addEventListener("mousedown", function (e) {
-    let shiftX = e.clientX - panel.getBoundingClientRect().left;
-    let shiftY = e.clientY - panel.getBoundingClientRect().top;
-
-    function moveAt(pageX, pageY) {
-      panel.style.left = pageX - shiftX + "px";
-      panel.style.top = pageY - shiftY + "px";
+  let isDragging = false;
+  let offsetX, offsetY;
+  titleBar.onmousedown = function (e) {
+    isDragging = true;
+    offsetX = e.clientX - panelr.getBoundingClientRect().left;
+    offsetY = e.clientY - panelr.getBoundingClientRect().top;
+  };
+  document.onmousemove = function (e) {
+    if (isDragging) {
+      panelr.style.left = e.clientX - offsetX + "px";
+      panelr.style.top = e.clientY - offsetY + "px";
     }
-
-    function onMouseMove(event) {
-      moveAt(event.pageX, event.pageY);
-    }
-
-    document.addEventListener("mousemove", onMouseMove);
-
-    titleBar.onmouseup = function () {
-      document.removeEventListener("mousemove", onMouseMove);
-      titleBar.onmouseup = null;
-    };
-  });
+  };
+  document.onmouseup = function () {
+    isDragging = false;
+  };
 
   // Prevent default drag events
   titleBar.ondragstart = function () {
