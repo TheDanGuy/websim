@@ -19,6 +19,27 @@ function createDarkModePanel() {
   panelr.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
   panelr.style.cursor = "move";
   panelr.style.overflow = 'scroll';
+  // do not inherit anything from the body
+  panelr.style.zIndex = "9999"; // Ensure it appears above other elements
+  panelr.style.fontFamily = "Arial, sans-serif";
+  panelr.style.fontSize = "14px";
+  panelr.style.display = "flex";
+  panelr.style.flexDirection = "column";
+  panelr.style.alignItems = "center";
+  panelr.style.justifyContent = "center";
+  panelr.style.top = "50%"; // Center vertically
+  panelr.style.left = "50%"; // Center horizontally
+  panelr.style.transform = "translate(-50%, -50%)"; // Adjust for centering
+  panelr.style.transition = "all 0.3s ease"; // Smooth transition for appearance
+  panelr.style.backgroundColor = "rgba(51, 51, 51, 0.9)"; // Semi-transparent dark background
+  panelr.style.backdropFilter = "blur(5px)"; // Blur effect for the background
+  panelr.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.5)"; // Enhanced shadow for depth
+  panelr.style.borderRadius = "10px"; // Rounded corners
+  panelr.style.padding = "20px"; // Padding for inner content
+  panelr.style.maxWidth = "90%"; // Responsive width
+  panelr.style.maxHeight = "80%"; // Responsive height
+  panelr.style.overflowY = "auto"; // Allow scrolling if content overflows
+  panelr.style.overflowX = "auto"; // Prevent horizontal overflow
   // add a title bar with a minimize button
   const titleBar = document.createElement("div");
   titleBar.style.backgroundColor = "#444";
@@ -63,8 +84,8 @@ function createDarkModePanel() {
   panel.style.top = `${scrollY + viewportHeight / 2 - 100}px`; // Center vertically (-100 to adjust for half the panel height)
   panel.style.left = `${viewportWidth / 2 - 150}px`; // Center horizontally (-150 to adjust for half the panel width)
 
-  // Append panel to the body
-  document.body.appendChild(panel);
+  // Append panel to the main page not body
+  document.importNode(panelr, true);
 
   // Make the panel draggable
   titleBar.addEventListener("mousedown", function (e) {
