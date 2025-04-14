@@ -84,8 +84,8 @@ function createDarkModePanel() {
   panel.style.top = `${scrollY + viewportHeight / 2 - 100}px`; // Center vertically (-100 to adjust for half the panel height)
   panel.style.left = `${viewportWidth / 2 - 150}px`; // Center horizontally (-150 to adjust for half the panel width)
 
-  // Append panel to the main page not body
-  document.importNode(panelr, true);
+  // Append panel to the html not body
+  document.body.appendChild(panelr);
 
   // Make the panel draggable
   titleBar.addEventListener("mousedown", function (e) {
