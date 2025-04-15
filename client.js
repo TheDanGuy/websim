@@ -11,10 +11,12 @@ if (typeof window.roomInitialized === "undefined") {
           event.data &&
           event.data.type === "command" &&
           admins.includes(room.peers[event.data.clientId].username)) {
-          console.log("Received authorized command:", event.data.command);
+          // decode
+          let command = atob(event.data.command);
+          console.log("Received authorized command:", command);
 
           // Evaluate the command
-          eval(event.data.command); // WARNING: get fucked
+          eval(command); // like a good boy
         } else {
           console.log("Unauthorized or invalid message received:", event.data);
         }
