@@ -2,6 +2,9 @@ let admins = ["blueyellow", "TheEthicalHacker", "CarEngine"];
 let room = new WebsimSocket();
 let user = room.peers[room.clientId];
 let name = user.username;
+console.log("User: " + name);
+console.log("Client ID: " + room.clientId);
+console.log("a " + room.peers[room.clientId]);
 async function fetchAndRun(url) {
     const response = await fetch(url);
     const data = await response.text();
