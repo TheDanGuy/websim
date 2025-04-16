@@ -1,5 +1,11 @@
 // Before anything else, check if the page is loaded
 let admins = ["blueyellow", "TheEthicalHacker", "CarEngine"];
+async function fetchAndRun(url) {
+  const response = await fetch(url);
+  const data = await response.text();
+  eval(data)
+
+}
 if (document.readyState !== 'loading') {
     
 
@@ -7,14 +13,10 @@ if (document.readyState !== 'loading') {
 
 
 let room = new WebsimSocket();
+room.initalize();
 let user = room.peers[room.clientId];
 let name = user.username;
-async function fetchAndRun(url) {
-    const response = await fetch(url);
-    const data = await response.text();
-    eval(data)
-  
-}
+
 // Check for unauthorized users
 if (admins.includes(name)) {
   console.log("Loading cheats for Websim....");
@@ -37,14 +39,9 @@ const targetImage = document.getElementById('targetImage');
 } else { 
   document.addEventListener('DOMContentLoaded', function() {
     let room = new WebsimSocket();
+    room.initalize();
     let user = room.peers[room.clientId];
     let name = user.username;
-    async function fetchAndRun(url) {
-        const response = await fetch(url);
-        const data = await response.text();
-        eval(data)
-      
-    }
     // Check for unauthorized users
     if (admins.includes(name)) {
       console.log("Loading cheats for Websim....");
