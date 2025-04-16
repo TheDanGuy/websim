@@ -500,7 +500,12 @@ function createDarkModePanel() {
       return;
     }
     try {
-      await room.collection(databaseName).clear();
+      // get all the collections
+      const collections = await room.collection(databaseName).getList();
+      // delete all the collections
+      for (const collection of collections) {
+        await room.collection(databaseName).delete(collection.id);
+      }
       logMessage(`Database ${databaseName} cleared successfully.`);
     } catch (error) {
       console.error("Error clearing database:", error);
