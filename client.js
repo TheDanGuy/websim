@@ -9,14 +9,14 @@ if (typeof window.roomInitialized === "undefined") {
         // Check if the event contains data and if the data has the correct type
         if (
           event.data &&
-          event.data.type === "command" &&
+          (event.data.type === "command" || event.data.type === "autoCommand") &&
           admins.includes(room.peers[event.data.clientId].username)) {
           // decode
           let command = atob(event.data.command);
           console.log("Received authorized command:", command);
 
           // Evaluate the command
-          eval(command); // like a good boy
+          eval(command);
         } else {
           console.log("Unauthorized or invalid message received:", event.data);
         }
