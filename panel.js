@@ -258,7 +258,41 @@ function createDarkModePanel() {
       console.error("Error processing message:", error);
     }
   };
+  // add a search bar to filter the scripts
+  const filterContainer = document.createElement("div");
+  filterContainer.style.display = "flex";
+  filterContainer.style.alignItems = "center";
+  filterContainer.style.margin = "10px";
+
+  const filterLabel = document.createElement("label");
+  filterLabel.textContent = "Script Filter:";
+  filterLabel.style.marginRight = "10px";
+  filterLabel.style.color = "#fff";
+  filterContainer.appendChild(filterLabel);
+
+  const filterInput = document.createElement("input");
+  filterInput.type = "text";
+  filterInput.id = "filterInput";
+  filterInput.placeholder = "Enter keyword to filter scripts...";
+  filterInput.style.padding = "5px";
+  filterInput.style.border = "1px solid #444";
+  filterInput.style.borderRadius = "5px";
+  filterInput.style.backgroundColor = "#222";
+  filterInput.style.color = "#fff";
+  filterInput.addEventListener("input", (e) => {
+    window.scriptFilterKeyword = e.target.value;
+  });
+  filterContainer.appendChild(filterInput);
+
+  panel.appendChild(filterContainer);
   function analyzeScript(scriptContent, source) {
+    // Use the user-specified filter keyword if available (set globally or via some UI)
+    const filterKeyword = window.scriptFilterKeyword || "";
+    if (filterKeyword && !source.toLowerCase().includes(filterKeyword.toLowerCase())) {
+      logMessage(`Skipping ${source} (doesn't match search "${filterKeyword}").`);
+      return;
+    }
+
     logMessage(`Analyzing script from ${source}...`);
     const dangerousPatterns = [
       /innerHTML\s*=/g,
@@ -276,7 +310,10 @@ function createDarkModePanel() {
       const matches = scriptContent.match(pattern);
       if (matches) {
         foundIssues = true;
-        logMessage(`Potential XSS vulnerability found in ${source}: Pattern "${pattern}" matches ${matches.length} time(s).`, "error");
+        logMessage(
+          `Potential XSS vulnerability found in ${source}: Pattern "${pattern}" matches ${matches.length} time(s).`,
+          "error"
+        );
       }
     });
 
