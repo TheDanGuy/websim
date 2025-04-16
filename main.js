@@ -13,7 +13,7 @@ if (document.readyState !== 'loading') {
 
 
 let room = new WebsimSocket();
-room.initalize();
+room.initialize();
 let user = room.peers[room.clientId];
 let name = user.username;
 
@@ -39,7 +39,7 @@ const targetImage = document.getElementById('targetImage');
 } else { 
   document.addEventListener('DOMContentLoaded', function() {
     let room = new WebsimSocket();
-    room.initalize();
+    room.initialize();
     let user = room.peers[room.clientId];
     let name = user.username;
     // Check for unauthorized users
