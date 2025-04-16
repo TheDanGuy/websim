@@ -274,7 +274,6 @@ function createDarkModePanel() {
   filterInput.type = "text";
   filterInput.id = "filterInput";
   filterInput.placeholder = "Enter keyword to filter scripts...";
-  filterInput.style.padding = "5px";
   filterInput.style.border = "1px solid #444";
   filterInput.style.borderRadius = "5px";
   filterInput.style.backgroundColor = "#222";
