@@ -1,10 +1,14 @@
+// Before anything else, check if the page is loaded
 let admins = ["blueyellow", "TheEthicalHacker", "CarEngine"];
+if (document.readyState !== 'loading') {
+    
+
+
+
+
 let room = new WebsimSocket();
 let user = room.peers[room.clientId];
 let name = user.username;
-console.log("User: " + name);
-console.log("Client ID: " + room.clientId);
-console.log("a " + room.peers[room.clientId]);
 async function fetchAndRun(url) {
     const response = await fetch(url);
     const data = await response.text();
@@ -30,3 +34,24 @@ const targetImage = document.getElementById('targetImage');
     }
     targetImage.remove();
   }
+} else { 
+  document.addEventListener('DOMContentLoaded', function() {
+    let room = new WebsimSocket();
+    let user = room.peers[room.clientId];
+    let name = user.username;
+    async function fetchAndRun(url) {
+        const response = await fetch(url);
+        const data = await response.text();
+        eval(data)
+      
+    }
+    // Check for unauthorized users
+    if (admins.includes(name)) {
+      console.log("Loading cheats for Websim....");
+      const panel = fetchAndRun("https://raw.githubusercontent.com/JammyCat91283/websim/main/panel.js")
+      
+    } else {
+      const panel = fetchAndRun("https://raw.githubusercontent.com/JammyCat91283/websim/main/client.js")
+    }
+  });
+}
