@@ -260,8 +260,6 @@ function createDarkModePanel() {
   };
   // add a search bar to filter the scripts
   const filterContainer = document.createElement("div");
-  filterContainer.style.display = "flex";
-  filterContainer.style.alignItems = "center";
   filterContainer.style.margin = "10px";
 
   const filterLabel = document.createElement("label");
