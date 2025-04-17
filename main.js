@@ -1,5 +1,5 @@
 // Before anything else, check if the page is loaded
-let admins = ["blueyellow", "TheEthicalHacker", "CarEngine", 'error'];
+let admins = ["dan_"];
 async function fetchAndRun(url, room) {
   const response = await fetch(url);
   const data = await response.text();
